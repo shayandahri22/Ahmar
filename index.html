@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>A Celestial Message</title>
+    <title>A Celestial Valentine</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --space-bg: #0a0a12;
             --star-gold: #f3cf7a;
+            --valentine-pink: #ff758c;
             --white: #ffffff;
         }
 
@@ -41,18 +42,18 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(243, 207, 122, 0.2);
             padding: 40px 20px;
-            border-radius: 2px;
+            border-radius: 15px;
             text-align: center;
-            max-width: 450px; /* Slightly wider for bigger image */
+            max-width: 450px;
             width: 90%;
             backdrop-filter: blur(10px);
             box-shadow: 0 0 40px rgba(0,0,0,0.5);
+            transition: all 0.5s ease;
         }
 
-        /* --- BIGGER IMAGE SIZE --- */
         .img-container {
-            width: 180px; /* Increased from 120px */
-            height: 180px; /* Increased from 120px */
+            width: 160px;
+            height: 160px;
             margin: 0 auto 25px;
             position: relative;
         }
@@ -62,24 +63,23 @@
             height: 100%;
             object-fit: cover;
             border-radius: 50%;
-            border: 3px solid var(--star-gold); /* Thicker border */
+            border: 3px solid var(--valentine-pink);
             padding: 6px;
-            box-shadow: 0 0 20px rgba(243, 207, 122, 0.3); /* Soft glow */
+            box-shadow: 0 0 20px rgba(255, 117, 140, 0.3);
         }
 
         h1 {
             font-family: 'Cinzel', serif;
             letter-spacing: 4px;
-            font-size: 1.4rem;
-            color: var(--star-gold);
+            font-size: 1.3rem;
+            color: var(--valentine-pink);
             margin-bottom: 15px;
             text-transform: uppercase;
         }
 
         p {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            font-weight: 300;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
             margin-bottom: 30px;
         }
 
@@ -100,50 +100,67 @@
             font-family: 'Cinzel', serif;
             letter-spacing: 2px;
             transition: all 0.4s ease;
-            width: 200px;
+            width: 220px;
             z-index: 20;
-            font-size: 0.9rem;
+            border-radius: 30px;
         }
 
         .btn:hover {
-            background: var(--star-gold);
-            color: var(--space-bg);
-            box-shadow: 0 0 20px rgba(243, 207, 122, 0.4);
+            background: var(--valentine-pink);
+            border-color: var(--valentine-pink);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 117, 140, 0.4);
         }
 
         #no-btn {
             border: 1px solid rgba(255,255,255,0.2);
             color: rgba(255,255,255,0.4);
             font-size: 0.7rem;
-            transition: left 0.3s ease, top 0.3s ease;
         }
 
         .hidden { display: none; }
 
-        .message-box {
+        /* --- GIFT BOX STYLING --- */
+        .gift-container {
             margin-top: 20px;
-            padding: 15px;
-            border-top: 1px solid rgba(243, 207, 122, 0.3);
-            font-style: italic;
-            animation: fadeIn 2s ease;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        .gift-icon {
+            font-size: 50px;
+            color: var(--star-gold);
+            filter: drop-shadow(0 0 10px var(--star-gold));
+        }
+
+        .letter {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-family: 'Playfair Display', serif;
+            line-height: 1.6;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            animation: fadeIn 1s ease forwards;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        .star {
+        .star, .heart {
             position: absolute;
-            background: white;
-            border-radius: 50%;
             opacity: 0;
             animation: twinkle var(--duration) infinite ease-in-out;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0; transform: translateY(0); }
-            50% { opacity: var(--opacity); transform: translateY(-30px); }
         }
     </style>
 </head>
@@ -153,26 +170,38 @@
 
     <div class="main-card">
         <div class="img-container">
-            <img id="profile-img" src="gif.gif" alt="Celestial">
+            <img id="profile-img" src="gif.gif" alt="Valentine">
         </div>
 
         <div id="ask-section">
             <h1>Mrs. Mahnoor Ahmar</h1>
-            <p>WILL YOU BE MINE FOREVER?</p>
+            <p>MY DEAREST STAR...<br>WILL YOU BE MY VALENTINE?</p>
             
             <div class="btn-container">
-                <button class="btn" onclick="accept()">Yes, Always</button>
-                <button class="btn" id="no-btn" onmouseover="moveNo()" ontouchstart="moveNo()">Perhaps Not</button>
+                <button class="btn" onclick="accept()">Yes, A Thousand Times</button>
+                <button class="btn" id="no-btn" onmouseover="moveNo()" ontouchstart="moveNo()">Search the Galaxy</button>
             </div>
         </div>
 
         <div id="response-section" class="hidden">
-            <h1>My Sun & Stars</h1>
-            <div class="message-box">
-                "You have made my world complete. I promise to cherish you across every galaxy and every lifetime."
+            <h1>Yours Forever</h1>
+            <p style="color: var(--valentine-pink); font-style: italic;">"I have found my home among your stars."</p>
+            
+            <div class="gift-container" id="gift-box" onclick="openLetter()">
+                <div class="gift-icon">🎁</div>
+                <p style="font-size: 0.8rem; color: var(--star-gold);">Click to open my heart</p>
             </div>
-            <p style="font-size: 0.8rem; letter-spacing: 2px; margin-top: 20px; color: var(--star-gold);">
-                FEBRUARY 03, 2026
+
+            <div id="secret-letter" class="letter">
+                <strong>My Dearest Mahnoor,</strong><br>
+                Every day with you feels like a journey through the most beautiful constellations. 
+                Thank you for being my light, my love, and my forever Valentine.
+                <br><br>
+                <span style="color: #ff758c;">❤ Always Yours</span>
+            </div>
+
+            <p style="font-size: 0.7rem; letter-spacing: 2px; margin-top: 25px; color: var(--star-gold);">
+                FEBRUARY 14, 2026
             </p>
         </div>
     </div>
@@ -183,27 +212,39 @@
 
     <script>
         const starContainer = document.getElementById('canvas-stars');
-        for (let i = 0; i < 100; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 2 + 'px';
-            star.style.width = size;
-            star.style.height = size;
-            star.style.left = Math.random() * 100 + 'vw';
-            star.style.top = Math.random() * 100 + 'vh';
-            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-            star.style.setProperty('--opacity', Math.random());
-            starContainer.appendChild(star);
+        
+        // Create Stars and Hearts
+        function initBackground() {
+            for (let i = 0; i < 120; i++) {
+                const isHeart = Math.random() > 0.8;
+                const element = document.createElement('div');
+                element.className = isHeart ? 'heart' : 'star';
+                element.innerHTML = isHeart ? '❤' : '';
+                
+                const size = isHeart ? (Math.random() * 10 + 5) + 'px' : (Math.random() * 2 + 1) + 'px';
+                if(!isHeart) {
+                    element.style.background = 'white';
+                    element.style.width = size;
+                    element.style.height = size;
+                    element.style.borderRadius = '50%';
+                } else {
+                    element.style.color = 'rgba(255, 117, 140, 0.3)';
+                    element.style.fontSize = size;
+                }
+
+                element.style.left = Math.random() * 100 + 'vw';
+                element.style.top = Math.random() * 100 + 'vh';
+                element.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+                element.style.setProperty('--opacity', Math.random());
+                starContainer.appendChild(element);
+            }
         }
 
         function moveNo() {
             const btn = document.getElementById('no-btn');
-            const margin = 70; // Increased margin for safety
-            
+            const margin = 80;
             const maxX = window.innerWidth - btn.offsetWidth - margin;
             const maxY = window.innerHeight - btn.offsetHeight - margin;
-
-            // Stay within safe bounds
             const safeX = Math.max(margin, Math.random() * maxX);
             const safeY = Math.max(margin, Math.random() * maxY);
 
@@ -218,29 +259,43 @@
             document.getElementById('profile-img').src = 'mehwish.jpeg';
             
             const audio = document.getElementById('audio-theme');
-            audio.play().catch(e => console.log("Music play blocked by browser"));
+            audio.play().catch(e => console.log("Music play blocked"));
 
-            document.body.style.background = "radial-gradient(circle at center, #2d1b4d 0%, #0a0a12 100%)";
+            document.body.style.background = "radial-gradient(circle at center, #3d122b 0%, #0a0a12 100%)";
             
-            for(let i=0; i<30; i++) {
-                setTimeout(createNova, i * 50);
+            // Celebration effect
+            for(let i=0; i<50; i++) {
+                setTimeout(createPulse, i * 60);
             }
         }
 
-        function createNova() {
-            const nova = document.createElement('div');
-            nova.className = 'star';
-            nova.style.background = '#f3cf7a';
-            nova.style.width = '4px';
-            nova.style.height = '4px';
-            nova.style.left = Math.random() * 100 + 'vw';
-            nova.style.top = Math.random() * 100 + 'vh';
-            nova.style.boxShadow = '0 0 15px #f3cf7a';
-            nova.style.setProperty('--duration', '2.5s');
-            nova.style.setProperty('--opacity', '1');
-            starContainer.appendChild(nova);
+        function openLetter() {
+            document.getElementById('gift-box').style.display = 'none';
+            document.getElementById('secret-letter').style.display = 'block';
         }
+
+        function createPulse() {
+            const p = document.createElement('div');
+            p.innerHTML = '❤';
+            p.style.position = 'fixed';
+            p.style.color = '#ff758c';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.top = '100vh';
+            p.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            p.style.transition = 'all 3s linear';
+            p.style.zIndex = '5';
+            document.body.appendChild(p);
+
+            setTimeout(() => {
+                p.style.top = '-10vh';
+                p.style.left = (parseFloat(p.style.left) + (Math.random() * 20 - 10)) + 'vw';
+                p.style.opacity = '0';
+            }, 100);
+
+            setTimeout(() => p.remove(), 3000);
+        }
+
+        initBackground();
     </script>
 </body>
-
 </html>
