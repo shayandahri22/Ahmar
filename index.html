@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Celestial Message</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --space-bg: #0a0a12;
+            --star-gold: #f3cf7a;
+            --white: #ffffff;
+        }
+
+        body {
+            background-color: var(--space-bg);
+            background: radial-gradient(circle at center, #1b1b2f 0%, #0a0a12 100%);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Playfair Display', serif;
+            overflow: hidden;
+            color: var(--white);
+        }
+
+        #canvas-stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .main-card {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(243, 207, 122, 0.2);
+            padding: 40px 20px;
+            border-radius: 2px;
+            text-align: center;
+            max-width: 450px; /* Slightly wider for bigger image */
+            width: 90%;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+
+        /* --- BIGGER IMAGE SIZE --- */
+        .img-container {
+            width: 180px; /* Increased from 120px */
+            height: 180px; /* Increased from 120px */
+            margin: 0 auto 25px;
+            position: relative;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid var(--star-gold); /* Thicker border */
+            padding: 6px;
+            box-shadow: 0 0 20px rgba(243, 207, 122, 0.3); /* Soft glow */
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 4px;
+            font-size: 1.4rem;
+            color: var(--star-gold);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            min-height: 130px;
+        }
+
+        .btn {
+            background: transparent;
+            color: var(--star-gold);
+            border: 1px solid var(--star-gold);
+            padding: 12px 40px;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            width: 200px;
+            z-index: 20;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background: var(--star-gold);
+            color: var(--space-bg);
+            box-shadow: 0 0 20px rgba(243, 207, 122, 0.4);
+        }
+
+        #no-btn {
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+            transition: left 0.3s ease, top 0.3s ease;
+        }
+
+        .hidden { display: none; }
+
+        .message-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-top: 1px solid rgba(243, 207, 122, 0.3);
+            font-style: italic;
+            animation: fadeIn 2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: translateY(0); }
+            50% { opacity: var(--opacity); transform: translateY(-30px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-stars"></div>
+
+    <div class="main-card">
+        <div class="img-container">
+            <img id="profile-img" src="gif.gif" alt="Celestial">
+        </div>
+
+        <div id="ask-section">
+            <h1>Mrs. Mehwish Ahmar</h1>
+            <p>WILL YOU BE MINE FOREVER?</p>
+            
+            <div class="btn-container">
+                <button class="btn" onclick="accept()">Yes, Always</button>
+                <button class="btn" id="no-btn" onmouseover="moveNo()" ontouchstart="moveNo()">Perhaps Not</button>
+            </div>
+        </div>
+
+        <div id="response-section" class="hidden">
+            <h1>My Sun & Stars</h1>
+            <div class="message-box">
+                "You have made my world complete. I promise to cherish you across every galaxy and every lifetime."
+            </div>
+            <p style="font-size: 0.8rem; letter-spacing: 2px; margin-top: 20px; color: var(--star-gold);">
+                FEBRUARY 03, 2026
+            </p>
+        </div>
+    </div>
+
+    <audio id="audio-theme" loop>
+        <source src="yes.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const starContainer = document.getElementById('canvas-stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            star.style.setProperty('--opacity', Math.random());
+            starContainer.appendChild(star);
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('no-btn');
+            const margin = 70; // Increased margin for safety
+            
+            const maxX = window.innerWidth - btn.offsetWidth - margin;
+            const maxY = window.innerHeight - btn.offsetHeight - margin;
+
+            // Stay within safe bounds
+            const safeX = Math.max(margin, Math.random() * maxX);
+            const safeY = Math.max(margin, Math.random() * maxY);
+
+            btn.style.position = 'fixed';
+            btn.style.left = safeX + 'px';
+            btn.style.top = safeY + 'px';
+        }
+
+        function accept() {
+            document.getElementById('ask-section').classList.add('hidden');
+            document.getElementById('response-section').classList.remove('hidden');
+            document.getElementById('profile-img').src = 'mehwish.jpeg';
+            
+            const audio = document.getElementById('audio-theme');
+            audio.play().catch(e => console.log("Music play blocked by browser"));
+
+            document.body.style.background = "radial-gradient(circle at center, #2d1b4d 0%, #0a0a12 100%)";
+            
+            for(let i=0; i<30; i++) {
+                setTimeout(createNova, i * 50);
+            }
+        }
+
+        function createNova() {
+            const nova = document.createElement('div');
+            nova.className = 'star';
+            nova.style.background = '#f3cf7a';
+            nova.style.width = '4px';
+            nova.style.height = '4px';
+            nova.style.left = Math.random() * 100 + 'vw';
+            nova.style.top = Math.random() * 100 + 'vh';
+            nova.style.boxShadow = '0 0 15px #f3cf7a';
+            nova.style.setProperty('--duration', '2.5s');
+            nova.style.setProperty('--opacity', '1');
+            starContainer.appendChild(nova);
+        }
+    </script>
+</body>
+</html>
